@@ -1,3 +1,10 @@
+:root {
+    --darkpurp: #522288;
+    --lightpurp: #783bbd;
+    --lighterpurp: #d0acf8;
+    --offwhite: #ead9ff;
+
+  }
 body{
     overflow: hidden;
     position: absolute;
@@ -14,6 +21,7 @@ header{
 }
 header a {
     text-decoration: none;
+    color: var(--lightpurp);
 }
 .wrapper{
     display: flex;
@@ -21,7 +29,6 @@ header a {
     align-items: center;
     text-align: left;
     flex-direction: column;
-
 }
 .start {
     text-align: center;
@@ -35,15 +42,38 @@ header a {
     justify-content: left;
     align-items: flex-start;
 }
+button {
+    background-color: var(--darkpurp);
+    color: white;
+    padding: 5px 10px;
+    margin: 10px;
+    border-radius: 7px;
 
+}
+button:hover{
+    background-color: var(--lightpurp);
+    cursor: pointer;
+}
 .choices button{
     padding: 5px 10px;
     margin: 10px;
-    border-radius: 10px;
     display: block;
 }
 
 
+#feedback {
+    border-top: 1px solid lightgray;
+}
+
+#highscores li:nth-child(odd) {
+    background: var(--lighterpurp);
+    list-style-position: inside;
+  }
+  
+  #highscores li:nth-child(even) {
+    list-style-position: inside;
+    background: var(--offwhite);
+  }
 
 .hide{
     display: none;

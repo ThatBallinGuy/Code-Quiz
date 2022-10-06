@@ -69,15 +69,16 @@ function questionClick(event) {
                 document.getElementById("timeText").textContent = "Time: " + time;
                 quizEnd();
             }
-            
             // give them feedback, letting them know it's wrong
-
+            document.getElementById("feedback").textContent = "Incorrect!";
+            document.getElementById("feedback").className = "show";
             // flash right feedback on page for a short period of time  
         }
         else{
             console.log("You guessed right!");
             // give them feedback, letting them know it's right
-
+            document.getElementById("feedback").textContent = "Correct!";
+            document.getElementById("feedback").className = "show";
             // flash right feedback on page for a short period of time  
 
             // move to next question
@@ -104,6 +105,7 @@ function quizEnd() {
     document.getElementById("final-score").textContent = time;
     // hide questions section
     document.getElementById('questions').className ="hide";
+    document.getElementById("feedback").className = "hide";
 }
 
 /* FUNCTION FOR UPDATING THE TIME */
@@ -126,18 +128,29 @@ function clockTick() {
 function saveHighscore() {
     // get value of input box - for initials
     var initials = document.getElementById('initials').value;
-    // make sure value wasn't empty
-
-        // get saved scores from localstorage, or if not any, set to empty array
-        let savedScores = JSON.parse(localStorage.getItem("savedScores"));
-        // format new score object for current user
-        var currentScore = {init: initials, score: time};
-        //savedScores = currentScore;
-        savedScores.push(currentScore);
-        // save to local storage
-        localStorage.setItem("savedScores",JSON.stringify(savedScores));
-        // redirect to next page
-        document.location.href = "./highscores.html";
+    // format new score object for current user
+    var currentScore = {init: initials, score: time};
+    // get saved scores from localstorage, or if not any, set to empty array
+    var savedScores = JSON.parse(localStorage.getItem("savedScores"));
+        // make sure value wasn't empty
+    if(initials === ""){
+        alert ("You must enter your initials to save your score");
+    }
+    
+    else{
+        if (savedScores !== null) {
+            console.log(typeof(savedScores[0]));
+            savedScores.push(currentScore);
+            // save to local storage
+            localStorage.setItem("savedScores",JSON.stringify(savedScores));
+        }
+        else{
+            savedScores = [currentScore];
+            localStorage.setItem("savedScores", JSON.stringify(savedScores));
+        }
+            // redirect to next page
+            document.location.href = "./highscores.html";
+    }
 }
 
 /* CLICK EVENTS */
