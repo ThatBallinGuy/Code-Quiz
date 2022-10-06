@@ -10,16 +10,41 @@ header{
     justify-content: space-between;
     align-items: flex-start;
     padding: 5px;
+    font-weight: bold;
+}
+header a {
+    text-decoration: none;
 }
 .wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: left;
+    flex-direction: column;
+
+}
+.start {
     text-align: center;
 }
 #start-screen p{
     width: 500px;
 }
+
+#questions {
+    position: relative;
+    justify-content: left;
+    align-items: flex-start;
+}
+
+.choices button{
+    padding: 5px 10px;
+    margin: 10px;
+    border-radius: 10px;
+    display: block;
+}
+
+
+
 .hide{
     display: none;
 }

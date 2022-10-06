@@ -1,7 +1,7 @@
 // variables to keep track of quiz state
     var currentQuestion = 0;
     var time = 60;
-    var timerId = document.getElementById('timeText');
+    var timer;
     
 
 // variables to reference DOM elements
@@ -18,110 +18,134 @@ function startQuiz(event) {
     document.getElementById('questions').className ="show";
     // start timer
     clockTick();
-    // show starting time
 
-    //getQuestion();
+    getQuestion();
 }
 
 /* FUNCTION TO GET/SHOW EACH QUESTION */
-function getQuestions() {
+function getQuestion() {
     // get current question object from array
+    var questionValue = questions[currentQuestion];
 
     // update title with current question
+    
+    document.getElementById('question-title').textContent =  questionValue.title;
 
     // clear out ant old question choices
+    document.getElementById('choices').innerHTML = '';
 
     // loop over choices
-        // FOR {
-            // create new button for each choice
-
-            // display on the page
-        
-        // }
+    for(var i=0;i<questionValue.choices.length;i++) {
+        //create new button for each choice
+        var btn = document.createElement("button");
+        btn.textContent = i+1 + ". " +questionValue.choices[i];
+        btn.setAttribute("data-index", i);
+        //display on the page
+        document.querySelector("#choices").appendChild(btn);
+    }
 }
 
 /* FUNCTION FOR CLICKING A QUESTION */
 function questionClick(event) {
-
+    //event.stopPropagation();
+    var element = event.target;
     // if the clicked element is not a choice button, do nothing.
-    if (something) {
-
+    if (element.matches("button") !== true) {
     }
+    else{
+        var questionValue = questions[currentQuestion];
+        // check if user guessed wrong
+        if(questionValue.answer !== questionValue.choices[element.getAttribute("data-index")]){
+            console.log("You guessed wrong!");
+            // penalize time
+            if(time>10){
+                time -= 10;
+                // display new time on page
+                document.getElementById("timeText").textContent = "Time: " + time;
+            }
+            else{
+                time-=time;
+                // display new time on page
+                document.getElementById("timeText").textContent = "Time: " + time;
+                quizEnd();
+            }
+            
+            // give them feedback, letting them know it's wrong
 
-    // check if user guessed wrong
-    if (something) {
-        // penalize time
+            // flash right feedback on page for a short period of time  
+        }
+        else{
+            console.log("You guessed right!");
+            // give them feedback, letting them know it's right
 
-        // display new time on page
+            // flash right feedback on page for a short period of time  
 
-        // give them feedback, letting them know it's wrong
-    } else {
-        // give them feedback, letting them know it's right
+            // move to next question
+            currentQuestion++;
+            if(currentQuestion>3){
+                quizEnd()
+                console.log("You won!");
+            }
+            else{
+                getQuestion();
+            }
+        }
+        
     }
-
-    // flash right/wrong feedback on page for a short period of time
-
-    // move to next question
-
-    // check if we've run out of questions
-        // if so, end the quiz
-        // else, get the next question    
 }
 
 /* FUNCTION TO END THE QUIZ */
 function quizEnd() {
     // stop timer
-
+    clearInterval(timer);
     // show end screen
-
+    document.getElementById('end-screen').className ="show";
     // show final score
-
+    document.getElementById("final-score").textContent = time;
     // hide questions section
+    document.getElementById('questions').className ="hide";
 }
 
 /* FUNCTION FOR UPDATING THE TIME */
 function clockTick() {
-    // update time
-    var timer = setInterval(function() {
+     timer = setInterval(function() {
+        
         time--;
+        // update time
         document.getElementById("timeText").textContent = "Time: " + time;
-        /*if (time >= 0) {
-          // Tests if win condition is met
-          if (isWin && time > 0) {
-            // Clears interval and stops timer
-            clearInterval(timer);
-            winGame();
-          }
-        }*/
 
-        // Tests if time has run out
         if (time === 0) {
-          // Clears interval
-          clearInterval(timer);
-          //loseGame();
+            // Clears interval
+            clearInterval(timer);
+            quizEnd();
         }
       }, 1000);
 
-    // check if user ran out of time
 }
 
 function saveHighscore() {
     // get value of input box - for initials
-
+    var initials = document.getElementById('initials').value;
     // make sure value wasn't empty
+
         // get saved scores from localstorage, or if not any, set to empty array
-
+        let savedScores = JSON.parse(localStorage.getItem("savedScores"));
         // format new score object for current user
-
+        var currentScore = {init: initials, score: time};
+        //savedScores = currentScore;
+        savedScores.push(currentScore);
         // save to local storage
-
+        localStorage.setItem("savedScores",JSON.stringify(savedScores));
         // redirect to next page
+        document.location.href = "./highscores.html";
 }
 
 /* CLICK EVENTS */
     // user clicks button to submit initials
+    document.querySelector("#submit").addEventListener("click", saveHighscore);
 
     // user clicks button to start quiz
     document.querySelector("#start-quiz").addEventListener("click", startQuiz);
 
     // user clicks on element containing choices
+    document.querySelector("#questions").addEventListener("click", questionClick);
