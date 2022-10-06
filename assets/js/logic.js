@@ -56,7 +56,6 @@ function questionClick(event) {
         var questionValue = questions[currentQuestion];
         // check if user guessed wrong
         if(questionValue.answer !== questionValue.choices[element.getAttribute("data-index")]){
-            console.log("You guessed wrong!");
             // penalize time
             if(time>10){
                 time -= 10;
@@ -72,20 +71,16 @@ function questionClick(event) {
             // give them feedback, letting them know it's wrong
             document.getElementById("feedback").textContent = "Incorrect!";
             document.getElementById("feedback").className = "show";
-            // flash right feedback on page for a short period of time  
         }
         else{
             console.log("You guessed right!");
             // give them feedback, letting them know it's right
             document.getElementById("feedback").textContent = "Correct!";
             document.getElementById("feedback").className = "show";
-            // flash right feedback on page for a short period of time  
-
             // move to next question
             currentQuestion++;
             if(currentQuestion>3){
                 quizEnd()
-                console.log("You won!");
             }
             else{
                 getQuestion();
@@ -139,7 +134,6 @@ function saveHighscore() {
     
     else{
         if (savedScores !== null) {
-            console.log(typeof(savedScores[0]));
             savedScores.push(currentScore);
             // save to local storage
             localStorage.setItem("savedScores",JSON.stringify(savedScores));
